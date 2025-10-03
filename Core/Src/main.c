@@ -20,7 +20,6 @@
 #include "main.h"
 #include "fdcan.h"
 #include "memorymap.h"
-#include "tim.h"
 #include "usb_otg.h"
 #include "gpio.h"
 
@@ -96,9 +95,6 @@ int main(void)
   MX_GPIO_Init();
   MX_USB_OTG_HS_HCD_Init();
   MX_FDCAN1_Init();
-  MX_TIM2_Init();
-  MX_TIM3_Init();
-  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 can_init();
   /* USER CODE END 2 */

@@ -13,11 +13,8 @@ typedef struct can_tx{
 }can_tx_t;
 typedef struct can_rx{
     FDCAN_HandleTypeDef *can_channel;
-    FDCAN_RxHeaderTypeDef cong_header;
+    FDCAN_FilterTypeDef filter_config;
     FDCAN_RxHeaderTypeDef rx_header;
-    uint32_t mask_setting;
-    uint32_t fifo_setting;
-    uint32_t filter_bank;
     uint8_t data[8];
 }can_rx_t;
 void CAN_Send_Data(can_tx_t *tx);
