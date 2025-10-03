@@ -3,6 +3,8 @@
         "fdcan.h": "c",
         "main.h": "c",
         "cong.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "can_com.h": "c",
+        "gpio.h": "c"
     }
 }

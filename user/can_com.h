@@ -23,4 +23,5 @@ typedef struct can_rx{
 void CAN_Send_Data(can_tx_t *tx);
 extern can_tx_t txcan;
 extern can_rx_t rxcan;
+void can_init(void);
 #endif /* CAN_COM_H_ */
