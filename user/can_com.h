@@ -4,6 +4,7 @@
 #include "cong.h"
 #include "stdint.h"
 
+#define MASK_ALL 0x1FFFFFFF
 
 typedef struct can_tx{
     FDCAN_HandleTypeDef *can_channel;

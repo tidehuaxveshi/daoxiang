@@ -24,6 +24,8 @@ void can_rx_mask_update(can_rx_t *rx, uint32_t id, uint32_t mask_setting, uint32
 	rx->filter_config.FilterConfig = fifo_setting;
 	rx->filter_config.FilterID1 = id;
 	rx->filter_config.FilterID2 = mask_setting;
+	HAL_FDCAN_ConfigFilter(rx->can_channel, &rx->filter_config);
+
 }
 
 void CAN_Send_Data(can_tx_t *tx)
@@ -36,7 +38,7 @@ void can_init(void)
 	txcan.can_channel = COMMUNICATION_CAN;
 	rxcan.can_channel = COMMUNICATION_CAN;
 	can_tx_update(&txcan, MOTOR_ID, DATA_SIZE_TRANSMIT, FDCAN_EXTENDED_ID, FDCAN_DATA_FRAME);
-	can_rx_update(&rxcan, 0x1, 0x1FFFFFFF, FDCAN_FILTER_TO_RXFIFO0, 0, FDCAN_EXTENDED_ID, FDCAN_DATA_FRAME);
+	can_rx_update(&rxcan, MOTOR_ID, MASK_ALL, FDCAN_FILTER_TO_RXFIFO0, 0, FDCAN_EXTENDED_ID, FDCAN_DATA_FRAME);
 	rx_mask_filter_config(&rxcan);
 	HAL_FDCAN_Start(COMMUNICATION_CAN);
 
