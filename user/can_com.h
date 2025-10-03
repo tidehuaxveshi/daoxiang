@@ -19,9 +19,7 @@ typedef struct can_rx{
     uint8_t data[8];
 }can_rx_t;
 void CAN_Send_Data(can_tx_t *tx);
-extern can_tx_t txcan_1;
-extern can_rx_t rxcan_1;
-extern can_tx_t txcan_2;
-extern can_rx_t rxcan_2;
+extern can_tx_t txcan;
+extern can_rx_t rxcan;
 void can_init(void);
 #endif /* CAN_COM_H_ */

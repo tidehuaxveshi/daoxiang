@@ -101,15 +101,13 @@ can_init();
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  txcan_1.data[0]=0xaa;
-  txcan_2.data[0]=0xbb;
+  txcan.data[0]=0xaa;
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    CAN_Send_Data(&txcan_1);
-    //CAN_Send_Data(&txcan_2);
+    CAN_Send_Data(&txcan);
     HAL_Delay(1000);
   }
   /* USER CODE END 3 */
