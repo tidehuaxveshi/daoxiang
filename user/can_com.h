@@ -3,9 +3,6 @@
 #include "fdcan.h"
 #include "cong.h"
 #include "stdint.h"
-#define MAIL_NUM 3
-
-#define CAN_FLITER(x) ((x)<<3)
 
 
 typedef struct can_tx{
