@@ -1,5 +1,5 @@
 // File: STM32H723_725_730_733_735.dbgconf
-// Version: 1.0.2
+// Version: 1.0.0
 // Note: refer to STM32H723/733, STM32H725/735 and STM32H730 Value line reference manual (RM0468)
 //       refer to STM32H723 STM32H725 STM32H730 STM32H733 STM32H735 datasheets
 
@@ -22,7 +22,7 @@ DbgMCU_CR = 0x00000007;
 //                                   <i> Reserved bits must be kept at reset value
 //   <o.6>  WWDG1                    <i> WWDG1 stop in debug
 // </h>
-DbgMCU_APB3_Fz1 = 0x00000040;
+DbgMCU_APB3_Fz1 = 0x00000000;
 
 // <h> DBGMCU APB1L peripheral freeze register (DBGMCU_APB1LFZ1)
 //                                   <i> Reserved bits must be kept at reset value
@@ -41,14 +41,14 @@ DbgMCU_APB3_Fz1 = 0x00000040;
 //   <o.1>  TIM3                     <i> TIM3 stop in debug
 //   <o.0>  TIM2                     <i> TIM2 stop in debug
 // </h>
-DbgMCU_APB1L_Fz1 = 0x02E003FF;
+DbgMCU_APB1L_Fz1 = 0x00000000;
 
 // <h> DBGMCU APB1H peripheral freeze register (DBGMCU_APB1HFZ1)
 //                                   <i> Reserved bits must be kept at reset value
 //   <o.25> TIM24                    <i> TIM24 stop in debug
 //   <o.24> TIM23                    <i> TIM23 stop in debug
 // </h>
-DbgMCU_APB1H_Fz1 = 0x03000000;
+DbgMCU_APB1H_Fz1 = 0x00000000;
 
 // <h> DBGMCU APB2 peripheral freeze register (DBGMCU_APB2FZ1)
 //                                   <i> Reserved bits must be kept at reset value
@@ -58,7 +58,7 @@ DbgMCU_APB1H_Fz1 = 0x03000000;
 //   <o.1>  TIM8                     <i> TIM8 stop in debug
 //   <o.0>  TIM1                     <i> TIM1 stop in debug
 // </h>
-DbgMCU_APB2_Fz1 = 0x00070003;
+DbgMCU_APB2_Fz1 = 0x00000000;
 
 // <h> DBGMCU APB4 peripheral freeze register (DBGMCU_APB4FZ1)
 //                                   <i> Reserved bits must be kept at reset value
@@ -70,7 +70,7 @@ DbgMCU_APB2_Fz1 = 0x00070003;
 //   <o.9>  LPTIM2                   <i> LPTIM2 stop in debug
 //   <o.7>  I2C4                     <i> I2C4 SMBUS timeout stop in debug
 // </h>
-DbgMCU_APB4_Fz1 = 0x00041E80;
+DbgMCU_APB4_Fz1 = 0x00000000;
 
 // <h> TPIU Pin Routing (TRACECLK fixed on Pin PE2)
 //   <i> TRACECLK: Pin PE2
