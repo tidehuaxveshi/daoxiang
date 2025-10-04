@@ -78,7 +78,6 @@ void can_rx_mask_update(can_rx_t *rx, uint32_t id, uint32_t mask_setting, uint32
 void can_send_data_two(can_tx_t *tx)
 {
 	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group1, tx->data_group1);
-  HAL_Delay(100);
 	 HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group2, tx->data_group2);
 }
 
