@@ -1,5 +1,9 @@
 #include "rm_motor.h"
 rm_motor_group_t wheel = {0};
+void current_adjust(rm_motor_group_t *tar, int index, float current)
+{
+    tar->current_set_float[index] = current;
+}
 /*
 tx1 should be 0x200 while tx2 should be 0x1ff
 */
