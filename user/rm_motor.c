@@ -39,12 +39,12 @@ void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
 
     int id_rx;
     id_rx = rx->rx_header.Identifier - RM_BASE_ID;
-    if (id_rx < 8 && id_rx > 0)
+    if (id_rx < 9 && id_rx > 0)
     {
-        tar->current_now[id_rx] = current;
-        tar->position[id_rx] = position;
-        tar->velocity[id_rx] = velocity;
-        tar->temp[id_rx] = temp;
+        tar->current_now[id_rx-1] = current;
+        tar->position[id_rx-1] = position;
+        tar->velocity[id_rx-1] = velocity;
+        tar->temp[id_rx-1] = temp;
     }
     else
     {

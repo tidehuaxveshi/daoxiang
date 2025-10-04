@@ -8,6 +8,7 @@
         "gpio.h": "c",
         "stdio.h": "c",
         "rm_motor.h": "c",
-        "user_main.h": "c"
+        "user_main.h": "c",
+        "cstdint": "cpp"
     }
 }
