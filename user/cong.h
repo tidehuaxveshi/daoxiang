@@ -12,7 +12,8 @@
 
 #define COMMUNICATION_UART (&huart1)
 #define COMMUNICATION_BAUDRATE 115200
-#define COMMUNICATION_CAN (&hfdcan1)
+#define COMMUNICATION_CAN_1 (&hfdcan1)
+#define COMMUNICATION_CAN_2 (&hfdcan2)
 
 
 #endif /* CONG_H_ */

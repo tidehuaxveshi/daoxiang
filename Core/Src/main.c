@@ -20,7 +20,6 @@
 #include "main.h"
 #include "fdcan.h"
 #include "memorymap.h"
-#include "usb_otg.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -93,22 +92,25 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USB_OTG_HS_HCD_Init();
   MX_FDCAN1_Init();
+  MX_FDCAN2_Init();
   /* USER CODE BEGIN 2 */
 can_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  txcan.data[0]=0xaa;
+  txcan_1.data[0]=0xaa;
+  txcan_2.data[0]=0xbb;
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    CAN_Send_Data(&txcan);
-    HAL_Delay(1000);
+    CAN_Send_Data(&txcan_1);
+    HAL_Delay(10);
+    CAN_Send_Data(&txcan_2);
+    HAL_Delay(10);
   }
   /* USER CODE END 3 */
 }
