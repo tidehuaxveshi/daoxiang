@@ -4,12 +4,19 @@ void current_adjust(rm_motor_group_t *tar, int index, float current)
 {
     tar->current_set_float[index] = current;
 }
+void current_adjust_all(rm_motor_group_t *tar, float current)
+{
+    for(int i=0;i<8;i++)
+    {
+        tar->current_set_float[i] = current;
+    }
+}
 /*
 tx1 should be 0x200 while tx2 should be 0x1ff
 */
 void current_set(rm_motor_group_t *tar, can_tx_t *tx)
 {
-    send_mapping(tar,tx);
+    send_mapping(tar);
     for (int i = 0; i < 4; i++)
     {
         tx->data_group1[i * 2] = (tar->current_set[i] >> 8);
@@ -17,7 +24,7 @@ void current_set(rm_motor_group_t *tar, can_tx_t *tx)
         tx->data_group2[i * 2] = (tar->current_set[i + 4] >> 8);
         tx->data_group2[i * 2 + 1] = tar->current_set[i + 4];
     }
-    CAN_Send_Data(tx);
+    can_send_data_two(tx);
 }
 void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
 {
@@ -38,9 +45,9 @@ void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
     tar->current_now[i] = current;
     tar->position[i] = position;
     tar->velocity[i] = velocity;
-    tar->temp[i] = temp
+    tar->temp[i] = temp;
 }
-void send_mapping(rm_motor_group_t *tar, can_tx_t *tx)
+void send_mapping(rm_motor_group_t *tar)
 {
     for(int i=0;i<8;i++)
     {

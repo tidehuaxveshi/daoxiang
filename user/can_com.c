@@ -76,7 +76,7 @@ void can_rx_mask_update(can_rx_t *rx, uint32_t id, uint32_t mask_setting, uint32
 void can_send_data_two(can_tx_t *tx)
 {
 	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group1, tx->data_group1);
-	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group2, tx->data_group2);
+	//HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group2, tx->data_group2);
 }
 
 void can_init(void)
@@ -101,12 +101,12 @@ void can_init(void)
 	// can_rx_mask_update(&rxcan_test, MOTOR_ID, MASK_ALL, FDCAN_FILTER_TO_RXFIFO0, 0, FDCAN_EXTENDED_ID, FDCAN_DATA_FRAME);
 
 	HAL_FDCAN_Start(COMMUNICATION_CAN_1);
-	HAL_FDCAN_Start(COMMUNICATION_CAN_2);
+	//HAL_FDCAN_Start(COMMUNICATION_CAN_2);
 
 	// __HAL_FDCAN_ENABLE_IT(COMMUNICATION_CAN, FDCAN_IT_RX_FIFO0_NEW_MESSAGE);
 	// __HAL_FDCAN_ENABLE_IT(COMMUNICATION_CAN, FDCAN_IT_RX_FIFO1_NEW_MESSAGE);
 	HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
-	HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+	//HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
 	// __HAL_CAN_ENABLE_IT(COMMUNICATION_CAN, CAN_IT_TX_MAILBOX_EMPTY);
 }
 

@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "can_com.h"
+#include "user_main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -106,6 +106,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    //current_adjust(&wheel, 2, 0.5);
+    current_adjust_all(&wheel, 0.5);
+    current_set(&wheel, &txcan_1);
+    HAL_Delay(1000);
     
   }
   /* USER CODE END 3 */
