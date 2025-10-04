@@ -22,7 +22,7 @@
 #define __STM32H7xx_IT_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Private includes ----------------------------------------------------------*/
@@ -59,6 +59,8 @@ void FDCAN1_IT0_IRQHandler(void);
 void FDCAN2_IT0_IRQHandler(void);
 void FDCAN1_IT1_IRQHandler(void);
 void FDCAN2_IT1_IRQHandler(void);
+void FDCAN3_IT0_IRQHandler(void);
+void FDCAN3_IT1_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */

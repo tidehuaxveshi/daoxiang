@@ -3,8 +3,8 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'daoxiang' 
- * Target:  'daoxiang' 
+ * Project: 'gm3508' 
+ * Target:  'gm3508' 
  */
 
 #ifndef RTE_COMPONENTS_H

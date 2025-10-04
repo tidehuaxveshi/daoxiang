@@ -14,6 +14,7 @@
 #define COMMUNICATION_BAUDRATE 115200
 #define COMMUNICATION_CAN_1 (&hfdcan1)
 #define COMMUNICATION_CAN_2 (&hfdcan2)
+#define COMMUNICATION_CAN_3 (&hfdcan3)
 
 
 #endif /* CONG_H_ */
