@@ -5,6 +5,8 @@
         "cong.h": "c",
         "stdint.h": "c",
         "can_com.h": "c",
-        "gpio.h": "c"
+        "gpio.h": "c",
+        "stdio.h": "c",
+        "rm_motor.h": "c"
     }
 }

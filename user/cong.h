@@ -2,8 +2,8 @@
 #define CONG_H_
 
 #define MOTOR_ID 0x1
-#define DATA_SIZE_TRANSMIT 8
-#define DATA_SIZE_RECEIVE 1
+// #define DATA_SIZE_TRANSMIT 8
+// #define DATA_SIZE_RECEIVE 1
 
 #define SYS_CLK 275000000
 
