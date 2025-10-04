@@ -3,6 +3,8 @@ can_tx_t txcan_1 = {0};
 can_rx_t rxcan_1 = {0};
 can_tx_t txcan_2 = {0};
 can_rx_t rxcan_2 = {0};
+can_tx_t txcan_3 = {0};
+can_rx_t rxcan_3 = {0};
 
 can_tx_t txcan_test = {0};
 can_rx_t rxcan_test = {0};
@@ -82,16 +84,18 @@ void can_send_data_two(can_tx_t *tx)
 
 void can_init(void)
 {
-	fdcan_setting_init(COMMUNICATION_CAN_2, 0);
+	fdcan_setting_init(COMMUNICATION_CAN_1, 0);
+	fdcan_setting_init(COMMUNICATION_CAN_2, 512);
 	fdcan_setting_init(COMMUNICATION_CAN_3, 1024);
 
-	txcan_1.can_channel = COMMUNICATION_CAN_2;
-	rxcan_1.can_channel = COMMUNICATION_CAN_2;
-	txcan_2.can_channel = COMMUNICATION_CAN_3;
-	rxcan_2.can_channel = COMMUNICATION_CAN_3;
+	txcan_1.can_channel = COMMUNICATION_CAN_1;
+	rxcan_1.can_channel = COMMUNICATION_CAN_1;
+	txcan_2.can_channel = COMMUNICATION_CAN_2;
+	rxcan_2.can_channel = COMMUNICATION_CAN_2;
+	txcan_3.can_channel = COMMUNICATION_CAN_3;
+	rxcan_3.can_channel = COMMUNICATION_CAN_3;
 
-	//txcan_test.can_channel = COMMUNICATION_CAN_3;
-	//rxcan_test.can_channel = COMMUNICATION_CAN_3;
+
 	// 111 1111 0000:0x200-0x20f
 	can_two_group_tx_update(&txcan_1, RM_GROUP_1, RM_GROUP_2, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
 	can_rx_mask_update(&rxcan_1, 0x0, 0x0, FDCAN_FILTER_TO_RXFIFO0, 0, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
@@ -99,13 +103,17 @@ void can_init(void)
 	can_two_group_tx_update(&txcan_2, RM_GROUP_1, RM_GROUP_2, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
 	can_rx_mask_update(&rxcan_2, 0x0, 0x0, FDCAN_FILTER_TO_RXFIFO0, 0, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
 
+	can_two_group_tx_update(&txcan_3, RM_GROUP_1, RM_GROUP_2, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
+	can_rx_mask_update(&rxcan_3, 0x0, 0x0, FDCAN_FILTER_TO_RXFIFO0, 0, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
+
+	HAL_FDCAN_Start(COMMUNICATION_CAN_1);
 	HAL_FDCAN_Start(COMMUNICATION_CAN_2);
 	HAL_FDCAN_Start(COMMUNICATION_CAN_3);
 
 	// __HAL_FDCAN_ENABLE_IT(COMMUNICATION_CAN, FDCAN_IT_RX_FIFO0_NEW_MESSAGE);
 	// __HAL_FDCAN_ENABLE_IT(COMMUNICATION_CAN, FDCAN_IT_RX_FIFO1_NEW_MESSAGE);
 	HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
-	//HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+	HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
 	HAL_FDCAN_ActivateNotification(&hfdcan3, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
 	// __HAL_CAN_ENABLE_IT(COMMUNICATION_CAN, CAN_IT_TX_MAILBOX_EMPTY);
 }

@@ -29,7 +29,7 @@ extern can_tx_t txcan_1;
 extern can_rx_t rxcan_1;
 extern can_tx_t txcan_2;
 extern can_rx_t rxcan_2;
-extern can_tx_t txcan_test;
-extern can_rx_t rxcan_test;
+extern can_tx_t txcan_3;
+extern can_rx_t rxcan_3;
 void can_init(void);
 #endif /* CAN_COM_H_ */
