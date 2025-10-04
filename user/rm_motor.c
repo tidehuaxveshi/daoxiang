@@ -6,7 +6,7 @@ void current_adjust(rm_motor_group_t *tar, int index, float current)
 }
 void current_adjust_all(rm_motor_group_t *tar, float current)
 {
-    for(int i=0;i<8;i++)
+    for (int i = 0; i < 8; i++)
     {
         tar->current_set_float[i] = current;
     }
@@ -32,25 +32,29 @@ void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
     int16_t velocity;
     int16_t current;
     uint8_t temp;
-    position = (int16_t)(((uint16_t)rx->data[0] << 8) | rx->data[1]);
-    velocity = (int16_t)(((uint16_t)rx->data[2] << 8) | rx->data[3]);
-    current = (int16_t)(((uint16_t)rx->data[4] << 8) | rx->data[5]);
+    position = (int16_t)(((uint16_t)(rx->data[0]) << 8) | rx->data[1]);
+    velocity = (int16_t)(((uint16_t)(rx->data[2]) << 8) | rx->data[3]);
+    current = (int16_t)(((uint16_t)(rx->data[4]) << 8) | rx->data[5]);
     temp = rx->data[6];
 
-    int i = rx->rx_header.Identifier - RM_BASE_ID;
-    if (i >= 8)
+    int id_rx;
+    id_rx = rx->rx_header.Identifier - RM_BASE_ID;
+    if (id_rx < 8 && id_rx > 0)
+    {
+        tar->current_now[id_rx] = current;
+        tar->position[id_rx] = position;
+        tar->velocity[id_rx] = velocity;
+        tar->temp[id_rx] = temp;
+    }
+    else
     {
         return;
     }
-    tar->current_now[i] = current;
-    tar->position[i] = position;
-    tar->velocity[i] = velocity;
-    tar->temp[i] = temp;
 }
 void send_mapping(rm_motor_group_t *tar)
 {
-    for(int i=0;i<8;i++)
+    for (int i = 0; i < 8; i++)
     {
-        tar->current_set[i] = (int16_t)(tar->current_set_float[i]*MAPPING_FACTOR);
+        tar->current_set[i] = (int16_t)(tar->current_set_float[i] * MAPPING_FACTOR);
     }
 }
