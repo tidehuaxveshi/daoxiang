@@ -111,7 +111,7 @@ void single_velocity_loop_cal(rm_motor_group_t *group,uint8_t index)
 {
     (group->velocity_pid+index)->measure=group->velocity[index];
     (group->velocity_pid+index)->target=group->velocity_target[index];
-    pid_cal(group+index);
+    pid_cal(group->velocity_pid+index);
     *(group->current_set_float+index)=(group->velocity_pid+index)->output;
 }
 void all_velocity_loop_cal(rm_motor_group_t*group)
