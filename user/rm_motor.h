@@ -3,7 +3,8 @@
 
 #include "can_com.h"
 
-#define MAPPING_FACTOR (float)(16384 / 20)
+#define CURRENT_MAPPING_FACTOR (float)(16384 / 20)
+#define POSITION_MAPPING_FACTOR (float)(8191/360)
 #define PI 3.14159265358979323846
 
 #define LIMITI(current, li) (current > ((SPWM_RESOLUTION >> 1) + li) ? ((SPWM_RESOLUTION >> 1) + li) : (current < (SPWM_RESOLUTION >> 1) - li) ? ((SPWM_RESOLUTION >> 1) - li) \ \
