@@ -46,6 +46,9 @@ void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
         tar->position[id_rx-1] = position;
         tar->velocity[id_rx-1] = velocity;
         tar->temp[id_rx-1] = temp;
+
+        receive_mapping(tar);
+
     }
     else
     {
@@ -57,6 +60,13 @@ void send_mapping(rm_motor_group_t *tar)
     for (int i = 0; i < 8; i++)
     {
         tar->current_set[i] = (int16_t)(tar->current_set_float[i] * MAPPING_FACTOR);
+    }
+}
+void receive_mapping(rm_motor_group_t *tar)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        tar->current_modified[i] = ((float)tar->current_now[i] / MAPPING_FACTOR);
     }
 }
 void pid_cal(pid *cal)

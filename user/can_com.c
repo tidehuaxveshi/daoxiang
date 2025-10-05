@@ -15,7 +15,7 @@ void fdcan_setting_init(FDCAN_HandleTypeDef *hfdcan, uint32_t offset)
 	hfdcan->Init.AutoRetransmission = DISABLE;
 	hfdcan->Init.TransmitPause = DISABLE;
 	hfdcan->Init.ProtocolException = DISABLE;
-	hfdcan->Init.NominalPrescaler = 8;
+	hfdcan->Init.NominalPrescaler = 12;
 	hfdcan->Init.NominalSyncJumpWidth = 1;
 	hfdcan->Init.NominalTimeSeg1 = 5;
 	hfdcan->Init.NominalTimeSeg2 = 2;
