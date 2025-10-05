@@ -40,6 +40,7 @@ typedef struct rm_motor_group
   float velocity_target[8];
 
   pid velocity_pid[8];
+  pid position_pid[8];
 } rm_motor_group_t;
 extern rm_motor_group_t wheel;
 extern pid wheel_pid[8];

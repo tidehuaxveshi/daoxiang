@@ -121,3 +121,16 @@ void all_velocity_loop_cal(rm_motor_group_t*group)
         single_velocity_loop_cal(group,i);
     }
 }
+void single_position_loop_cal(rm_motor_group_t *group,uint8_t index)
+{
+    (group->position+index)->measure=group->velocity[index];
+    (group->position_pid+index)->target=group->velocity_target[index];
+    pid_cal(group->position_pid+index);
+    *(group->current_set_float+index)=(group->position_pid+index)->output;
+}
+void all_position_loop_cal(rm_motor_group_t*group)
+{
+    for(int i=0;i<8;i++){
+        single_position_loop_cal(group,i);
+    }
+}
