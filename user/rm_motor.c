@@ -2,13 +2,13 @@
 rm_motor_group_t wheel = {0};
 void current_adjust(rm_motor_group_t *tar, int index, float current)
 {
-    tar->current_set_float[index] = current;
+    tar->current_set_modified[index] = current;
 }
 void current_adjust_all(rm_motor_group_t *tar, float current)
 {
     for (int i = 0; i < 8; i++)
     {
-        tar->current_set_float[i] = current;
+        tar->current_set_modified[i] = current;
     }
 }
 /*
@@ -42,10 +42,12 @@ void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
     if (id_rx < 9 && id_rx > 0)
     {
         tar->current_now[id_rx - 1] = current;
+        tar->position_last[id_rx - 1] = tar->position[id_rx - 1];
         tar->position[id_rx - 1] = position;
         tar->velocity[id_rx - 1] = velocity;
         tar->temp[id_rx - 1] = temp;
 
+        absolute_angle_cal(tar);
         receive_mapping(tar);
     }
     else
@@ -57,7 +59,7 @@ void send_mapping(rm_motor_group_t *tar)
 {
     for (int i = 0; i < 8; i++)
     {
-        tar->current_set[i] = (int16_t)(tar->current_set_float[i] * CURRENT_MAPPING_FACTOR);
+        tar->current_set[i] = (int16_t)(tar->current_set_modified[i] * CURRENT_MAPPING_FACTOR);
     }
 }
 void receive_mapping(rm_motor_group_t *tar)
@@ -66,6 +68,7 @@ void receive_mapping(rm_motor_group_t *tar)
     {
         tar->current_modified[i] = ((float)tar->current_now[i] / CURRENT_MAPPING_FACTOR);
         tar->position_modified[i] = ((float)tar->position[i] / POSITION_MAPPING_FACTOR);
+        tar->position_absolute_modified[i]=tar->position_modified[i]+tar->cycle[i]*360.0f;
     }
 }
 void pid_cal(pid *cal)
@@ -113,7 +116,7 @@ void single_velocity_loop_cal(rm_motor_group_t *group, uint8_t index)
     (group->velocity_pid + index)->measure = group->velocity[index];
     (group->velocity_pid + index)->target = group->velocity_target[index];
     pid_cal(group->velocity_pid + index);
-    *(group->current_set_float + index) = (group->velocity_pid + index)->output;
+    group->current_set_modified[index] = (group->velocity_pid + index)->output;
 }
 void all_velocity_loop_cal(rm_motor_group_t *group)
 {
@@ -124,15 +127,30 @@ void all_velocity_loop_cal(rm_motor_group_t *group)
 }
 void single_position_loop_cal(rm_motor_group_t *group, uint8_t index)
 {
-    (group->position_pid + index)->measure = group->position[index];
-    (group->position_pid + index)->target = group->position_target[index];
+    (group->position_pid + index)->measure = group->position_absolute_modified[index];
+    (group->position_pid + index)->target = group->position_target_modified[index];
     pid_cal(group->position_pid + index);
-    *(group->current_set_float + index) = (group->position_pid + index)->output;
+    group->current_set_modified[index] = (group->position_pid + index)->output;
 }
 void all_position_loop_cal(rm_motor_group_t *group)
 {
     for (int i = 0; i < 8; i++)
     {
         single_position_loop_cal(group, i);
+    }
+}
+void absolute_angle_cal(rm_motor_group_t *tar)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if ((tar->position[i] - tar->position_last[i]) >> 15 == 1 && tar->velocity[i] == 0)
+        {
+            tar->cycle[i]--;
+        }
+        else if ((tar->position[i] - tar->position_last[i]) >> 15 == 0 && tar->velocity[i] == 1)
+        {
+            tar->cycle[i]++;
+        }
+        tar->position_absolute[i] = tar->cycle[i] * ENCODER_RESOLUTION + tar->position[i];
     }
 }

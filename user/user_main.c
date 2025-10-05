@@ -50,6 +50,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		// current_adjust_all(&wheel, 1.5);
 		//  current_adjust(&wheel,2,1.5);
 		//all_velocity_loop_cal(&wheel);
+		
 		all_position_loop_cal(&wheel);
 		current_set(&wheel, &txcan_3);
 	}
