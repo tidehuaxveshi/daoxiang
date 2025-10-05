@@ -53,6 +53,9 @@ typedef struct rm_motor_group
     pid velocity_pid[8];
     pid position_pid[8];
 
+    pid velocity_pid_inner[8];
+    pid position_pid_outter[8];
+
 } rm_motor_group_t;
 extern rm_motor_group_t wheel;
 extern pid wheel_pid[8];
