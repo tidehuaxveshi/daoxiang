@@ -156,14 +156,16 @@ void absolute_angle_cal(rm_motor_group_t *tar)
 }
 void single_serial_loop_cal(rm_motor_group_t *group, uint8_t index)
 {
-    (group->velocity_pid_inner + index)->measure = group->velocity[index];
-    (group->velocity_pid_inner + index)->target = group->velocity_target[index];
-    pid_cal(group->velocity_pid_inner + index);
+    
 
     (group->position_pid_outter + index)->measure = group->position_absolute_modified[index];
-    (group->position_pid_outter + index)->target = (group->velocity_pid_inner + index)->output;
+    (group->position_pid_outter + index)->target = group->position_target_modified[index];
     pid_cal(group->position_pid_outter + index);
-    group->current_set_modified[index] = (group->position_pid_outter + index)->output;
+    
+    (group->velocity_pid_inner + index)->measure = group->velocity[index];
+    (group->velocity_pid_inner + index)->target = (group->position_pid_outter + index)->output;
+    pid_cal(group->velocity_pid_inner + index);
+    group->current_set_modified[index] = (group->velocity_pid_inner + index)->output;
 
 }
 void all_serial_position_loop_cal(rm_motor_group_t *group)
