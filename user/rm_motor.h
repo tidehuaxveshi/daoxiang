@@ -53,4 +53,6 @@ void current_adjust(rm_motor_group_t *tar, int index, float current);
 void current_adjust_all(rm_motor_group_t *tar, float current);
 void single_velocity_loop_cal(rm_motor_group_t *group,uint8_t index);
 void all_velocity_loop_cal(rm_motor_group_t*group);
+void single_position_loop_cal(rm_motor_group_t *group,uint8_t index);
+void all_position_loop_cal(rm_motor_group_t*group);
 #endif /* RM_MOTOR_H_ */
