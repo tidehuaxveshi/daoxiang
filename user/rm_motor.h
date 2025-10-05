@@ -71,4 +71,6 @@ void all_velocity_loop_cal(rm_motor_group_t *group);
 void single_position_loop_cal(rm_motor_group_t *group, uint8_t index);
 void all_position_loop_cal(rm_motor_group_t *group);
 void absolute_angle_cal(rm_motor_group_t *tar);
+void single_serial_loop_cal(rm_motor_group_t *group, uint8_t index);
+void all_serial_position_loop_cal(rm_motor_group_t *group);
 #endif /* RM_MOTOR_H_ */

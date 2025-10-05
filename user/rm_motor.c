@@ -170,6 +170,6 @@ void all_serial_position_loop_cal(rm_motor_group_t *group)
 {
     for (int i = 0; i < 8; i++)
     {
-        single_serial_position_loop_cal(group, i);
+        single_serial_loop_cal(group, i);
     }
 }
