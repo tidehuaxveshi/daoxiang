@@ -75,7 +75,7 @@ void pid_cal(pid *cal)
 {
     cal->error_last = cal->error;
     cal->error = cal->target - cal->measure;
-    cal->integral = cal->integral + cal->error;
+    cal->integral = cal->integral + cal->Ki *cal->error;
     if (cal->integral > cal->integral_limit)
     {
         cal->integral = cal->integral_limit;
@@ -85,7 +85,7 @@ void pid_cal(pid *cal)
         cal->integral = -cal->integral_limit;
     }
 
-    cal->output = cal->Kp * cal->error + cal->Ki * cal->integral + cal->Kd * (cal->error - cal->error_last);
+    cal->output = cal->Kp * cal->error +  cal->integral + cal->Kd * (cal->error - cal->error_last);
     if (cal->output > cal->output_limit)
     {
         cal->output = cal->output_limit;
@@ -143,13 +143,13 @@ void absolute_angle_cal(rm_motor_group_t *tar)
 {
     for (int i = 0; i < 8; i++)
     {
-        if ((tar->position[i] - tar->position_last[i]) >> 15 == 1 && tar->velocity[i] == 0)
-        {
-            tar->cycle[i]--;
-        }
-        else if ((tar->position[i] - tar->position_last[i]) >> 15 == 0 && tar->velocity[i] == 1)
+        if (tar->position[i] - tar->position_last[i]<-ENCODER_RESOLUTION/2)
         {
             tar->cycle[i]++;
+        }
+        else if (tar->position[i] - tar->position_last[i]> ENCODER_RESOLUTION/2)
+        {
+            tar->cycle[i]--;
         }
         tar->position_absolute[i] = tar->cycle[i] * ENCODER_RESOLUTION + tar->position[i];
     }

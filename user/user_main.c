@@ -33,10 +33,10 @@ void user_init(void)
 
 	can_init();
 	serial_init();
-	pid_init(wheel.velocity_pid+2,0.02,0.01,0,1,5);
-	pid_init(wheel.position_pid+2,0.02,0.01,0,1,5);
+	pid_init(wheel.velocity_pid+2,0.01,0.01,0,1,5);
+	pid_init(wheel.position_pid+2,0.01,0.01,0,1,5);
 	wheel.velocity_target[2]=50;
-	wheel.position_target[2]=5000;
+	wheel.position_target_modified[2]=100;
 	tim_init();
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -49,9 +49,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		// current_adjust_all(&wheel, 1.5);
 		//  current_adjust(&wheel,2,1.5);
-		//all_velocity_loop_cal(&wheel);
+		all_velocity_loop_cal(&wheel);
 		
-		all_position_loop_cal(&wheel);
+		//all_position_loop_cal(&wheel);
 		current_set(&wheel, &txcan_3);
 	}
 }
