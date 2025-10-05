@@ -36,7 +36,7 @@ void user_init(void)
 	pid_init(wheel.velocity_pid+2,0.02,0.01,0,1,5);
 	pid_init(wheel.position_pid+2,0.02,0.01,0,1,5);
 	wheel.velocity_target[2]=50;
-	wheel.position_target[2]=50;
+	wheel.position_target[2]=5000;
 	tim_init();
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
