@@ -15,9 +15,10 @@ void serial_voltage_output_test_dma(transmit_packet_t *motor_data)
 {
 
     transmit_packet.data[0] = (float)wheel.current_set_float[2];
-    transmit_packet.data[1] = (float)wheel.current_now[2];
-    transmit_packet.data[2] = (float)wheel.position[2];
+    transmit_packet.data[4] = (float)wheel.velocity_target[2];
     transmit_packet.data[3] = (float)wheel.velocity[2];
+  transmit_packet.data[1] = (float)wheel.current_modified[2];
+    transmit_packet.data[2] = (float)wheel.position_modified[2];
     
 }
 void dma_tansmit_init(void)
