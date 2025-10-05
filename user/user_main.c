@@ -23,11 +23,11 @@ void tim_init(void)
 	__HAL_TIM_SET_PRESCALER(&htim1, 0);
 	__HAL_TIM_SET_AUTORELOAD(&htim1, SYS_CLK/MAIN_FREQ - 1);
 	__HAL_TIM_SET_COUNTER(&htim1, 0);
-	HAL_TIM_Base_Start_IT(&htim1);
-	__HAL_TIM_SET_PRESCALER(&htim8, 0);
-	__HAL_TIM_SET_AUTORELOAD(&htim8, SYS_CLK/MOTOR_CONTROL_FREQ - 1);
+	HAL_TIM_Base_Start(&htim1);
+	__HAL_TIM_SET_PRESCALER(&htim8, SYS_CLK/1000000);
+	__HAL_TIM_SET_AUTORELOAD(&htim8, 1000000/MOTOR_CONTROL_FREQ - 1);
 	__HAL_TIM_SET_COUNTER(&htim8, 0);
-	HAL_TIM_Base_Start_IT(&htim8);
+	HAL_TIM_Base_Start(&htim8);
 }
 void user_init(void)
 {
@@ -45,6 +45,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if( htim->Instance == TIM8)
 	{
-		
+    current_adjust_all(&wheel,1.5);
+    //current_adjust(&wheel,2,1.5);
+		current_set(&wheel,&txcan_3);
 	}
 }

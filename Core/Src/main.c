@@ -99,9 +99,9 @@ int main(void)
   MX_FDCAN1_Init();
   MX_FDCAN2_Init();
   MX_FDCAN3_Init();
-  MX_UART7_Init();
   MX_TIM1_Init();
   MX_TIM8_Init();
+  MX_UART5_Init();
   /* USER CODE BEGIN 2 */
   user_init();
   /* USER CODE END 2 */
@@ -113,7 +113,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    
+     current_adjust_all(&wheel,1.5);
+    //current_adjust(&wheel,2,1.5);
+		current_set(&wheel,&txcan_3);
+    HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }

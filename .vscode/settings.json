@@ -9,6 +9,7 @@
         "stdio.h": "c",
         "rm_motor.h": "c",
         "user_main.h": "c",
-        "cstdint": "cpp"
+        "cstdint": "cpp",
+        "serial.h": "c"
     }
 }
