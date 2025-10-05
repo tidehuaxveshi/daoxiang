@@ -1,5 +1,6 @@
 #include "rm_motor.h"
 rm_motor_group_t wheel = {0};
+pid wheel_pid[8] = {0};
 void current_adjust(rm_motor_group_t *tar, int index, float current)
 {
     tar->current_set_float[index] = current;
@@ -57,4 +58,37 @@ void send_mapping(rm_motor_group_t *tar)
     {
         tar->current_set[i] = (int16_t)(tar->current_set_float[i] * MAPPING_FACTOR);
     }
+}
+void pid_cal(pid *cal)
+{
+    cal->error_last = cal->error;
+    cal->error = cal->target - cal->measure;
+    cal->integral = cal->integral + cal->error;
+    if (cal->integral > cal->integral_limit)
+    {
+        cal->integral = cal->integral_limit;
+    }
+    else if (cal->integral < -cal->integral_limit)
+    {
+        cal->integral = -cal->integral_limit;
+    }
+
+    cal->output = cal->Kp * cal->error + cal->Ki * cal->integral + cal->Kd * (cal->error - cal->error_last);
+    if (cal->output > cal->output_limit)
+    {
+        cal->output = cal->output_limit;
+    }
+    else if (cal->output < -cal->output_limit)
+    {
+        cal->output = -cal->output_limit;
+    }
+}
+void pid_init(pid *pid_init, float p, float i, float d, float integral_limit, float output_limit)
+{
+    pid_init->Kp = p;
+    pid_init->Ki = i;
+    pid_init->Kd = d;
+    pid_init->integral = 0;
+    pid_init->integral_limit = integral_limit;
+    pid_init->output_limit = output_limit;
 }

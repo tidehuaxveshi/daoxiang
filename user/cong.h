@@ -6,7 +6,8 @@
 // #define DATA_SIZE_RECEIVE 1
 
 #define SYS_CLK 240000000
-
+#define MAIN_FREQ 100000
+#define MOTOR_CONTROL_FREQ 1000
 
 
 
@@ -17,5 +18,6 @@
 #define COMMUNICATION_CAN_3 (&hfdcan3)
 
 #define COMMUNICATION_UART (&huart7)
+
 
 #endif /* CONG_H_ */
