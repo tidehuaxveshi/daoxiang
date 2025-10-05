@@ -57,14 +57,15 @@ void send_mapping(rm_motor_group_t *tar)
 {
     for (int i = 0; i < 8; i++)
     {
-        tar->current_set[i] = (int16_t)(tar->current_set_float[i] * MAPPING_FACTOR);
+        tar->current_set[i] = (int16_t)(tar->current_set_float[i] * CURRENT_MAPPING_FACTOR);
     }
 }
 void receive_mapping(rm_motor_group_t *tar)
 {
     for (int i = 0; i < 8; i++)
     {
-        tar->current_modified[i] = ((float)tar->current_now[i] / MAPPING_FACTOR);
+        tar->current_modified[i] = ((float)tar->current_now[i] / CURRENT_MAPPING_FACTOR);
+        tar->position_modified[i]=((float)tar->position[i]/POSITION_MAPPING_FACTOR);
     }
 }
 void pid_cal(pid *cal)
