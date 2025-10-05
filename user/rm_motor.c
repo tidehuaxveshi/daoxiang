@@ -1,6 +1,5 @@
 #include "rm_motor.h"
 rm_motor_group_t wheel = {0};
-pid wheel_pid[8] = {0};
 void current_adjust(rm_motor_group_t *tar, int index, float current)
 {
     tar->current_set_float[index] = current;
@@ -42,13 +41,12 @@ void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
     id_rx = rx->rx_header.Identifier - RM_BASE_ID;
     if (id_rx < 9 && id_rx > 0)
     {
-        tar->current_now[id_rx-1] = current;
-        tar->position[id_rx-1] = position;
-        tar->velocity[id_rx-1] = velocity;
-        tar->temp[id_rx-1] = temp;
+        tar->current_now[id_rx - 1] = current;
+        tar->position[id_rx - 1] = position;
+        tar->velocity[id_rx - 1] = velocity;
+        tar->temp[id_rx - 1] = temp;
 
         receive_mapping(tar);
-
     }
     else
     {
@@ -101,4 +99,24 @@ void pid_init(pid *pid_init, float p, float i, float d, float integral_limit, fl
     pid_init->integral = 0;
     pid_init->integral_limit = integral_limit;
     pid_init->output_limit = output_limit;
+}
+// void pid_group(rm_motor_group_t *tar)
+// {
+//     tar->wheel_velocity_pid
+// }
+/*
+input:group of pid
+*/
+void single_velocity_loop_cal(rm_motor_group_t *group,uint8_t index)
+{
+    (group->velocity_pid+index)->measure=group->velocity[index];
+    (group->velocity_pid+index)->target=group->velocity_target[index];
+    pid_cal(group+index);
+    *(group->current_set_float+index)=(group->velocity_pid+index)->output;
+}
+void all_velocity_loop_cal(rm_motor_group_t*group)
+{
+    for(int i=0;i<8;i++){
+        single_velocity_loop_cal(group,i);
+    }
 }
