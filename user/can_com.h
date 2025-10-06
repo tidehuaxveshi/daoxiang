@@ -5,6 +5,9 @@
 #include "stdint.h"
 #include "stdio.h"
 #define MASK_ALL 0x1FFFFFFF
+
+#define ENCODER_ADDR_1 0x01
+
 #define RM_GROUP_1 0x200
 #define RM_GROUP_2 0x1FF
 #define RM_BASE_ID 0x200
@@ -13,10 +16,8 @@
 
 typedef struct can_tx{
     FDCAN_HandleTypeDef *can_channel;
-    FDCAN_TxHeaderTypeDef header_group1;
-    FDCAN_TxHeaderTypeDef header_group2;
-    uint8_t data_group1[8];
-    uint8_t data_group2[8];
+    FDCAN_TxHeaderTypeDef header;
+    uint8_t data_group[8];
 }can_tx_t;
 typedef struct can_rx{
     FDCAN_HandleTypeDef *can_channel;
@@ -24,7 +25,9 @@ typedef struct can_rx{
     FDCAN_RxHeaderTypeDef rx_header;
     uint8_t data[8];
 }can_rx_t;
-void can_send_data_two(can_tx_t *tx);
+extern can_rx_t rxcan_3_standard;
+void can_group_tx_update(can_tx_t *tx, uint32_t id_1, uint8_t length, uint32_t STD_EXT, uint32_t RTR);
+void can_send_data(can_tx_t *tx);
 extern can_tx_t txcan_1;
 extern can_rx_t rxcan_1;
 extern can_tx_t txcan_2;

@@ -12,10 +12,10 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	}
 	else if (hfdcan == COMMUNICATION_CAN_3)
 	{
-		HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxcan_3.rx_header, rxcan_3.data);
+		HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxcan_3_standard.rx_header, rxcan_3_standard.data);
 	}
 
-	data_extract(&wheel, &rxcan_3);
+	data_extract(&wheel, &rxcan_3_standard);
 }
 void tim_init(void)
 {
@@ -30,17 +30,10 @@ void tim_init(void)
 }
 void user_init(void)
 {
-
 	can_init();
+	rm_motor_group_init();
 	serial_init();
-	wheel.velocity_target[2]=5000;
-	wheel.position_target_modified[2]=100;
-	pid_init(wheel.velocity_pid+2,0.01,0.001,0,20,20);
-	pid_init(wheel.position_pid+2,0.4,0,10,5,10);
 	
-
-	pid_init(wheel.velocity_pid_inner+2,0.01,0,0,1,5);
-	pid_init(wheel.position_pid_outter+2,0.1,0.1,0,800,1000);
 	tim_init();
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -51,11 +44,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if (htim->Instance == TIM8)
 	{
-		// current_adjust_all(&wheel, 1.5);
-		//  current_adjust(&wheel,2,1.5);
-		//all_velocity_loop_cal(&wheel);
-		all_position_loop_cal(&wheel);
-		//all_serial_position_loop_cal(&wheel);
-		current_set(&wheel, &txcan_3);
+		rm_motor_control();
+
 	}
 }

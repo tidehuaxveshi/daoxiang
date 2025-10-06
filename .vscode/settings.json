@@ -10,6 +10,14 @@
         "rm_motor.h": "c",
         "user_main.h": "c",
         "cstdint": "cpp",
-        "serial.h": "c"
+        "serial.h": "c",
+        "brt38_com.h": "c",
+        "tim.h": "c",
+        "bit": "c",
+        "compare": "c",
+        "cstddef": "c",
+        "limits": "c",
+        "new": "c",
+        "usart.h": "c"
     }
 }

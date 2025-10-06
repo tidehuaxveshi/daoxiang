@@ -1,5 +1,23 @@
 #include "rm_motor.h"
 rm_motor_group_t wheel = {0};
+can_tx_t M3508_tx_one = {0};
+can_tx_t M3508_tx_two = {0};
+void rm_motor_group_init()
+{
+    M3508_tx_one.can_channel = COMMUNICATION_CAN_3;
+    M3508_tx_two.can_channel = COMMUNICATION_CAN_3;
+    can_group_tx_update(&M3508_tx_one, RM_GROUP_1, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
+    can_group_tx_update(&M3508_tx_two, RM_GROUP_2, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
+
+    wheel.velocity_target[2]=5000;
+	wheel.position_target_modified[2]=100;
+	pid_init(wheel.velocity_pid+2,0.01,0.001,0,20,20);
+	pid_init(wheel.position_pid+2,0.4,0,10,5,10);
+	
+
+	pid_init(wheel.velocity_pid_inner+2,0.01,0,0,1,5);
+	pid_init(wheel.position_pid_outter+2,0.1,0.1,0,800,1000);
+}
 void current_adjust(rm_motor_group_t *tar, int index, float current)
 {
     tar->current_set_modified[index] = current;
@@ -14,17 +32,18 @@ void current_adjust_all(rm_motor_group_t *tar, float current)
 /*
 tx1 should be 0x200 while tx2 should be 0x1ff
 */
-void current_set(rm_motor_group_t *tar, can_tx_t *tx)
+void current_set(rm_motor_group_t *tar, can_tx_t *tx_one, can_tx_t *tx_two)
 {
     send_mapping(tar);
     for (int i = 0; i < 4; i++)
     {
-        tx->data_group1[i * 2] = (tar->current_set[i] >> 8);
-        tx->data_group1[i * 2 + 1] = tar->current_set[i];
-        tx->data_group2[i * 2] = (tar->current_set[i + 4] >> 8);
-        tx->data_group2[i * 2 + 1] = tar->current_set[i + 4];
+        tx_one->data_group[i * 2] = (tar->current_set[i] >> 8);
+        tx_one->data_group[i * 2 + 1] = tar->current_set[i];
+        tx_two->data_group[i * 2] = (tar->current_set[i + 4] >> 8);
+        tx_two->data_group[i * 2 + 1] = tar->current_set[i + 4];
     }
-    can_send_data_two(tx);
+    can_send_data(tx_one);
+    can_send_data(tx_two);
 }
 void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
 {
@@ -68,14 +87,14 @@ void receive_mapping(rm_motor_group_t *tar)
     {
         tar->current_modified[i] = ((float)tar->current_now[i] / CURRENT_MAPPING_FACTOR);
         tar->position_modified[i] = ((float)tar->position[i] / POSITION_MAPPING_FACTOR);
-        tar->position_absolute_modified[i]=tar->position_modified[i]+tar->cycle[i]*360.0f;
+        tar->position_absolute_modified[i] = tar->position_modified[i] + tar->cycle[i] * 360.0f;
     }
 }
 void pid_cal(pid *cal)
 {
     cal->error_last = cal->error;
     cal->error = cal->target - cal->measure;
-    cal->integral = cal->integral + cal->Ki *cal->error;
+    cal->integral = cal->integral + cal->Ki * cal->error;
     if (cal->integral > cal->integral_limit)
     {
         cal->integral = cal->integral_limit;
@@ -85,7 +104,7 @@ void pid_cal(pid *cal)
         cal->integral = -cal->integral_limit;
     }
 
-    cal->output = cal->Kp * cal->error +  cal->integral + cal->Kd * (cal->error - cal->error_last);
+    cal->output = cal->Kp * cal->error + cal->integral + cal->Kd * (cal->error - cal->error_last);
     if (cal->output > cal->output_limit)
     {
         cal->output = cal->output_limit;
@@ -143,11 +162,11 @@ void absolute_angle_cal(rm_motor_group_t *tar)
 {
     for (int i = 0; i < 8; i++)
     {
-        if (tar->position[i] - tar->position_last[i]<-ENCODER_RESOLUTION/2)
+        if (tar->position[i] - tar->position_last[i] < -ENCODER_RESOLUTION / 2)
         {
             tar->cycle[i]++;
         }
-        else if (tar->position[i] - tar->position_last[i]> ENCODER_RESOLUTION/2)
+        else if (tar->position[i] - tar->position_last[i] > ENCODER_RESOLUTION / 2)
         {
             tar->cycle[i]--;
         }
@@ -156,17 +175,15 @@ void absolute_angle_cal(rm_motor_group_t *tar)
 }
 void single_serial_loop_cal(rm_motor_group_t *group, uint8_t index)
 {
-    
 
     (group->position_pid_outter + index)->measure = group->position_absolute_modified[index];
     (group->position_pid_outter + index)->target = group->position_target_modified[index];
     pid_cal(group->position_pid_outter + index);
-    
+
     (group->velocity_pid_inner + index)->measure = group->velocity[index];
     (group->velocity_pid_inner + index)->target = (group->position_pid_outter + index)->output;
     pid_cal(group->velocity_pid_inner + index);
     group->current_set_modified[index] = (group->velocity_pid_inner + index)->output;
-
 }
 void all_serial_position_loop_cal(rm_motor_group_t *group)
 {
@@ -174,4 +191,13 @@ void all_serial_position_loop_cal(rm_motor_group_t *group)
     {
         single_serial_loop_cal(group, i);
     }
+}
+void rm_motor_control()
+{
+    // current_adjust_all(&wheel, 1.5);
+    //  current_adjust(&wheel,2,1.5);
+    // all_velocity_loop_cal(&wheel);
+    all_position_loop_cal(&wheel);
+    // all_serial_position_loop_cal(&wheel);
+    current_set(&wheel, &M3508_tx_one, &M3508_tx_two);
 }

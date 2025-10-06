@@ -58,9 +58,10 @@ typedef struct rm_motor_group
 } rm_motor_group_t;
 extern rm_motor_group_t wheel;
 extern pid wheel_pid[8];
+void rm_motor_group_init();
 void pid_init(pid *pid_init, float p, float i, float d, float integral_limit, float output_limit);
 void data_extract(rm_motor_group_t *tar, can_rx_t *rx);
-void current_set(rm_motor_group_t *tar, can_tx_t *tx);
+void current_set(rm_motor_group_t *tar, can_tx_t *tx_one,can_tx_t *tx_two);
 void send_mapping(rm_motor_group_t *tar);
 void receive_mapping(rm_motor_group_t *tar);
 void current_adjust(rm_motor_group_t *tar, int index, float current);
@@ -72,4 +73,5 @@ void all_position_loop_cal(rm_motor_group_t *group);
 void absolute_angle_cal(rm_motor_group_t *tar);
 void single_serial_loop_cal(rm_motor_group_t *group, uint8_t index);
 void all_serial_position_loop_cal(rm_motor_group_t *group);
+void rm_motor_control();
 #endif /* RM_MOTOR_H_ */
