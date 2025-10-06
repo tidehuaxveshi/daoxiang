@@ -78,7 +78,7 @@ void can_rx_mask_update(can_rx_t *rx, uint32_t id, uint32_t mask_setting, uint32
 void can_send_data_two(can_tx_t *tx)
 {
 	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group1, tx->data_group1);
-	 HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group2, tx->data_group2);
+	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header_group2, tx->data_group2);
 }
 
 void can_init(void)
@@ -93,7 +93,6 @@ void can_init(void)
 	rxcan_2.can_channel = COMMUNICATION_CAN_2;
 	txcan_3.can_channel = COMMUNICATION_CAN_3;
 	rxcan_3.can_channel = COMMUNICATION_CAN_3;
-
 
 	// 111 1111 0000:0x200-0x20f
 	can_two_group_tx_update(&txcan_1, RM_GROUP_1, RM_GROUP_2, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);

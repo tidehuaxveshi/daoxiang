@@ -7,8 +7,7 @@
 #define POSITION_MAPPING_FACTOR (float)(8191 / 360)
 #define PI 3.14159265358979323846
 #define ENCODER_RESOLUTION 8192
-#define LIMITI(current, li) (current > ((SPWM_RESOLUTION >> 1) + li) ? ((SPWM_RESOLUTION >> 1) + li) : (current < (SPWM_RESOLUTION >> 1) - li) ? ((SPWM_RESOLUTION >> 1) - li) \ \
-                                                                                                                                               : current)
+#define LIMITI(current, li) (current > ((SPWM_RESOLUTION >> 1) + li) ? ((SPWM_RESOLUTION >> 1) + li) : (current < (SPWM_RESOLUTION >> 1) - li) ? ((SPWM_RESOLUTION >> 1) - li): current)
 #define ANGLE_ELE_LIMITI(angle, lower_bound, upper_bound) ((angle > upper_bound) ? (angle - upper_bound) : ((angle < lower_bound) ? (angle + upper_bound) : (angle)))
 
 typedef struct pid
