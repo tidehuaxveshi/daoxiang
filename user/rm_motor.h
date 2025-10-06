@@ -7,7 +7,8 @@
 #define POSITION_MAPPING_FACTOR (float)(8191 / 360)
 #define PI 3.14159265358979323846
 #define ENCODER_RESOLUTION 8192
-#define LIMITI(current, li) (current > ((SPWM_RESOLUTION >> 1) + li) ? ((SPWM_RESOLUTION >> 1) + li) : (current < (SPWM_RESOLUTION >> 1) - li) ? ((SPWM_RESOLUTION >> 1) - li): current)
+#define LIMITI(current, li) (current > ((SPWM_RESOLUTION >> 1) + li) ? ((SPWM_RESOLUTION >> 1) + li) : (current < (SPWM_RESOLUTION >> 1) - li) ? ((SPWM_RESOLUTION >> 1) - li) \
+                                                                                                                                               : current)
 #define ANGLE_ELE_LIMITI(angle, lower_bound, upper_bound) ((angle > upper_bound) ? (angle - upper_bound) : ((angle < lower_bound) ? (angle + upper_bound) : (angle)))
 
 typedef struct pid
@@ -24,6 +25,8 @@ typedef struct pid
 } pid;
 typedef struct rm_motor_group
 {
+    can_tx_t M3508_tx_one;
+    can_tx_t M3508_tx_two;
     // not normalized data
     int16_t current_set[8];
     int16_t current_now[8];
@@ -60,8 +63,8 @@ extern rm_motor_group_t wheel;
 extern pid wheel_pid[8];
 void rm_motor_group_init();
 void pid_init(pid *pid_init, float p, float i, float d, float integral_limit, float output_limit);
-void data_extract(rm_motor_group_t *tar, can_rx_t *rx);
-void current_set(rm_motor_group_t *tar, can_tx_t *tx_one,can_tx_t *tx_two);
+void rm_motor_data_extract(rm_motor_group_t *tar, can_rx_t *rx);
+void current_set(rm_motor_group_t *tar);
 void send_mapping(rm_motor_group_t *tar);
 void receive_mapping(rm_motor_group_t *tar);
 void current_adjust(rm_motor_group_t *tar, int index, float current);

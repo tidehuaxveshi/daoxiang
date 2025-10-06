@@ -1,13 +1,11 @@
 #include "rm_motor.h"
 rm_motor_group_t wheel = {0};
-can_tx_t M3508_tx_one = {0};
-can_tx_t M3508_tx_two = {0};
 void rm_motor_group_init()
 {
-    M3508_tx_one.can_channel = COMMUNICATION_CAN_3;
-    M3508_tx_two.can_channel = COMMUNICATION_CAN_3;
-    can_group_tx_update(&M3508_tx_one, RM_GROUP_1, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
-    can_group_tx_update(&M3508_tx_two, RM_GROUP_2, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
+    wheel.M3508_tx_one.can_channel = COMMUNICATION_CAN_3;
+    wheel.M3508_tx_two.can_channel = COMMUNICATION_CAN_3;
+    can_group_tx_update(&wheel.M3508_tx_one, RM_GROUP_1, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
+    can_group_tx_update(&wheel.M3508_tx_two, RM_GROUP_2, RM_DATA_SIZE_TRANSMIT, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
 
     wheel.velocity_target[2]=5000;
 	wheel.position_target_modified[2]=100;
@@ -32,18 +30,18 @@ void current_adjust_all(rm_motor_group_t *tar, float current)
 /*
 tx1 should be 0x200 while tx2 should be 0x1ff
 */
-void current_set(rm_motor_group_t *tar, can_tx_t *tx_one, can_tx_t *tx_two)
+void current_set(rm_motor_group_t *tar)
 {
     send_mapping(tar);
     for (int i = 0; i < 4; i++)
     {
-        tx_one->data_group[i * 2] = (tar->current_set[i] >> 8);
-        tx_one->data_group[i * 2 + 1] = tar->current_set[i];
-        tx_two->data_group[i * 2] = (tar->current_set[i + 4] >> 8);
-        tx_two->data_group[i * 2 + 1] = tar->current_set[i + 4];
+        tar->M3508_tx_one.data_group[i * 2] = (tar->current_set[i] >> 8);
+        tar->M3508_tx_one.data_group[i * 2 + 1] = tar->current_set[i];
+        tar->M3508_tx_two.data_group[i * 2] = (tar->current_set[i + 4] >> 8);
+        tar->M3508_tx_two.data_group[i * 2 + 1] = tar->current_set[i + 4];
     }
-    can_send_data(tx_one);
-    can_send_data(tx_two);
+    can_send_data(&tar->M3508_tx_one);
+    can_send_data(&tar->M3508_tx_two);
 }
 void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
 {
@@ -123,13 +121,7 @@ void pid_init(pid *pid_init, float p, float i, float d, float integral_limit, fl
     pid_init->integral_limit = integral_limit;
     pid_init->output_limit = output_limit;
 }
-// void pid_group(rm_motor_group_t *tar)
-// {
-//     tar->wheel_velocity_pid
-// }
-/*
-input:group of pid
-*/
+
 void single_velocity_loop_cal(rm_motor_group_t *group, uint8_t index)
 {
     (group->velocity_pid + index)->measure = group->velocity[index];
@@ -199,5 +191,5 @@ void rm_motor_control()
     // all_velocity_loop_cal(&wheel);
     all_position_loop_cal(&wheel);
     // all_serial_position_loop_cal(&wheel);
-    current_set(&wheel, &M3508_tx_one, &M3508_tx_two);
+    current_set(&wheel);
 }

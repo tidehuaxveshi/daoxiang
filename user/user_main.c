@@ -15,7 +15,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 		HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxcan_3_standard.rx_header, rxcan_3_standard.data);
 	}
 
-	data_extract(&wheel, &rxcan_3_standard);
+	rm_motor_data_extract(&wheel, &rxcan_3_standard);
+	BRT38_angle_acquisition(&BRT38_COM,&rxcan_3_standard)
 }
 void tim_init(void)
 {
@@ -45,6 +46,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	else if (htim->Instance == TIM8)
 	{
 		rm_motor_control();
+		BRT38_read_cmd(1);
 
 	}
 }
