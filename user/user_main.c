@@ -36,7 +36,7 @@ void user_init(void)
 	rm_motor_group_init();
 	BRT38_init();
 	serial_init();
-	j60_init();
+	//j60_init();
 	tim_init();
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

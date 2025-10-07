@@ -64,5 +64,7 @@ typedef struct j60_group
     j60_t j60[16];
 } j60_group_t;
 extern j60_group_t j60_group;
-void j60_group_control_set(j60_group_t *tar)
+void j60_init();
+void j60_group_data_acquisition(j60_group_t *tar, can_rx_t *can_rx);
+void j60_group_control_set(j60_group_t *tar);
 #endif // J60_H
