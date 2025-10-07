@@ -43,7 +43,7 @@ void fdcan_setting_init(FDCAN_HandleTypeDef *hfdcan, uint32_t offset)
 }
 
 
-void can_group_tx_update(can_tx_t *tx, uint32_t id, uint8_t length, uint32_t STD_EXT, uint32_t RTR)
+void can_group_tx_update(can_tx_t *tx, uint32_t id, uint32_t length, uint32_t STD_EXT, uint32_t RTR)
 {
 	tx->header.Identifier = id;
 	tx->header.IdType = STD_EXT;
@@ -70,7 +70,7 @@ void can_rx_mask_update(can_rx_t *rx, uint32_t id, uint32_t mask_setting, uint32
 
 void can_send_data(can_tx_t *tx)
 {
-	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header, tx->data_group);
+	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header, tx->data);
 }
 
 void can_init(void)

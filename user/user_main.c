@@ -48,6 +48,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		rm_motor_control();
 		BRT38_read_cmd(1);
+		j60_group_control_set(&j60_group);
 
 	}
 }
