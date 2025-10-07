@@ -35,6 +35,16 @@ void dma_tansmit_init(void)
     HAL_UART_Transmit_DMA(COMMUNICATION_UART, (uint8_t *)&transmit_packet.data[0], DATA_TEST_TRANSMIT_SIZE * 4 + 4);
     __HAL_DMA_DISABLE_IT(&COMMUNICATION_UART_TX_DMA, DMA_IT_HT);
 }
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart == COMMUNICATION_UART)
+    {
+        __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
+        __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_HT);
+        HAL_UART_Transmit_DMA(COMMUNICATION_UART, tail, 4);
+        __HAL_DMA_ENABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
+    }
+}
 
 // void data_acquisition(motor_t *motor_data, receive_packet_t *receive)
 // {
