@@ -9,11 +9,12 @@
 #define CIRCLE_MAX 32
 void BRT38_read_cmd(uint8_t id);
 typedef struct BRT38_COM{
-    can_tx_t BRT_38_tx;
+    can_tx_t BRT38_can_tx;
     uint32_t raw_angle;
 
     float angle;
 }BRT38_COM_t;
-
-extern BRT38_COM_t BRT38_COM;
+void BRT38_init();
+void BRT38_angle_acquisition(BRT38_COM_t* brt38_com, can_rx_t *rx);
+extern BRT38_COM_t BRT38;
 #endif 
