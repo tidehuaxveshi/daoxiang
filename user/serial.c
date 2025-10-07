@@ -46,7 +46,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
     {
         __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
         __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_HT);
-         HAL_UART_Transmit_DMA(COMMUNICATION_UART, (uint8_t *)&transmit_packet.data[0], DATA_TEST_TRANSMIT_SIZE * 4 + 4);
+         HAL_UART_Transmit_IT(COMMUNICATION_UART, (uint8_t *)&transmit_packet.data[0], DATA_TEST_TRANSMIT_SIZE * 4 + 4);
         __HAL_DMA_ENABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
     }
 }

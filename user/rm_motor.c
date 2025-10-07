@@ -10,7 +10,7 @@ void rm_motor_group_init()
     wheel.velocity_target[2]=5000;
 	wheel.position_target_modified[2]=100;
 	pid_init(wheel.velocity_pid+2,0.01,0.001,0,20,20);
-	pid_init(wheel.position_pid+2,0.4,0,10,5,10);
+	pid_init(wheel.position_pid+2,0.4,0,10,5,20);
 	
 
 	pid_init(wheel.velocity_pid_inner+2,0.01,0,0,1,5);
