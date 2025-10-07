@@ -3,7 +3,7 @@ static unsigned char tail[4] = {0x00, 0x00, 0x80, 0x7f};
 receive_packet_t receive_packet = {0};
 
 #if defined(__clang__) && defined(__ARMCC_VERSION)
-__attribute__((section(".ARM.__at_0x24000000")))
+//__attribute__((section(".ARM.__at_0x24000000")))
 #elif defined(__GNUC__)
 __attribute__((section(".DMA")))
 #else
@@ -14,7 +14,7 @@ transmit_packet_t transmit_packet = {0};
 void serial_init(void)
 {
     dma_tansmit_init();
-    HAL_UARTEx_ReceiveToIdle_DMA(COMMUNICATION_UART, (uint8_t *)&receive_packet, DATA_TEST_RECEIVE_SIZE * 4 + 2);
+    HAL_UARTEx_ReceiveToIdle_IT(COMMUNICATION_UART, (uint8_t *)&receive_packet, DATA_TEST_RECEIVE_SIZE * 4 + 2);
 
     __HAL_DMA_DISABLE_IT(&COMMUNICATION_UART_RX_DMA, DMA_IT_HT);
 }
@@ -37,19 +37,19 @@ void dma_tansmit_init(void)
     transmit_packet.tail[1] = 0x00;
     transmit_packet.tail[2] = 0x80;
     transmit_packet.tail[3] = 0x7f;
-    HAL_UART_Transmit_DMA(COMMUNICATION_UART, (uint8_t *)&transmit_packet.data[0], DATA_TEST_TRANSMIT_SIZE * 4 + 4);
+    HAL_UART_Transmit_IT(COMMUNICATION_UART, (uint8_t *)&transmit_packet.data[0], DATA_TEST_TRANSMIT_SIZE * 4 + 4);
     __HAL_DMA_DISABLE_IT(&COMMUNICATION_UART_TX_DMA, DMA_IT_HT);
 }
-// void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-// {
-//     if (huart == COMMUNICATION_UART)
-//     {
-//         __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
-//         __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_HT);
-//          HAL_UART_Transmit_DMA(COMMUNICATION_UART, (uint8_t *)&transmit_packet.data[0], DATA_TEST_TRANSMIT_SIZE * 4 + 4);
-//         __HAL_DMA_ENABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
-//     }
-// }
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart == COMMUNICATION_UART)
+    {
+        __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
+        __HAL_DMA_DISABLE_IT(&hdma_uart5_tx, DMA_IT_HT);
+         HAL_UART_Transmit_DMA(COMMUNICATION_UART, (uint8_t *)&transmit_packet.data[0], DATA_TEST_TRANSMIT_SIZE * 4 + 4);
+        __HAL_DMA_ENABLE_IT(&hdma_uart5_tx, DMA_IT_TC);
+    }
+}
 
 // void data_acquisition(motor_t *motor_data, receive_packet_t *receive)
 // {
