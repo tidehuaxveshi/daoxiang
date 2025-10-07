@@ -35,10 +35,10 @@ void current_set(rm_motor_group_t *tar)
     send_mapping(tar);
     for (int i = 0; i < 4; i++)
     {
-        tar->M3508_tx_one.data_group[i * 2] = (tar->current_set[i] >> 8);
-        tar->M3508_tx_one.data_group[i * 2 + 1] = tar->current_set[i];
-        tar->M3508_tx_two.data_group[i * 2] = (tar->current_set[i + 4] >> 8);
-        tar->M3508_tx_two.data_group[i * 2 + 1] = tar->current_set[i + 4];
+        tar->M3508_tx_one.data[i * 2] = (tar->current_set[i] >> 8);
+        tar->M3508_tx_one.data[i * 2 + 1] = tar->current_set[i];
+        tar->M3508_tx_two.data[i * 2] = (tar->current_set[i + 4] >> 8);
+        tar->M3508_tx_two.data[i * 2 + 1] = tar->current_set[i + 4];
     }
     can_send_data(&tar->M3508_tx_one);
     can_send_data(&tar->M3508_tx_two);

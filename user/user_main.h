@@ -5,5 +5,6 @@
 #include "serial.h"
 #include "tim.h"
 #include "BRT38_COM.h"
+#include "j60.h"
 void user_init(void);
 #endif /* USER_MAIN_H_ */

@@ -17,6 +17,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 
 	rm_motor_data_extract(&wheel, &rxcan_3_standard);
 	BRT38_angle_acquisition(&BRT38,&rxcan_3_standard);
+	j60_group_data_acquisition(&j60_group, &rxcan_3_standard);
 }
 void tim_init(void)
 {
@@ -35,7 +36,7 @@ void user_init(void)
 	rm_motor_group_init();
 	BRT38_init();
 	serial_init();
-	
+	j60_init();
 	tim_init();
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -48,6 +49,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		rm_motor_control();
 		BRT38_read_cmd(1);
+		j60_group_control_set(&j60_group);
 
 	}
 }

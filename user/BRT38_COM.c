@@ -3,10 +3,10 @@ BRT38_COM_t BRT38 = {0};
 void BRT38_read_cmd(uint8_t id)
 {
     can_group_tx_update(&BRT38.BRT38_can_tx, 2, 4, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
-    BRT38.BRT38_can_tx.data_group[0] = READ_CMD;
-    BRT38.BRT38_can_tx.data_group[1] = id;
-    BRT38.BRT38_can_tx.data_group[2] = 0x01;
-    BRT38.BRT38_can_tx.data_group[3] = 0x00;
+    BRT38.BRT38_can_tx.data[0] = READ_CMD;
+    BRT38.BRT38_can_tx.data[1] = id;
+    BRT38.BRT38_can_tx.data[2] = 0x01;
+    BRT38.BRT38_can_tx.data[3] = 0x00;
     can_send_data(&BRT38.BRT38_can_tx);
 }
 void BRT38_angle_acquisition(BRT38_COM_t* brt38_com, can_rx_t *rx)
