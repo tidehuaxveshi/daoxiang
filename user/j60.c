@@ -93,6 +93,11 @@ void j60_control_set(j60_t *tar, can_tx_t *can_tx)
     can_tx->data[7] = (uint8_t)(tar->torque_target_raw & 0xFFF0) >> 8 ;
     can_send_data(can_tx);
 }
+void j60_init()
+{
+    j60_group.j60_tx.can_channel = COMMUNICATION_CAN_3;
+    j60_group.j60[1].motor_id = 1;
+}
 void j60_group_control_set(j60_group_t *tar)
 {
     for (int i = 0; i < 16; i++)
