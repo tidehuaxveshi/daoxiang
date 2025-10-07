@@ -6,13 +6,13 @@
 #define J60_ID_BIAS 0x10
 // mapping:from raw data to physical value
 // inverse mapping:from physical value to raw data
-#define angle_mapping(x) (uint32_t)((x + 40.0f) * 80.0f / 65535)
+#define angle_mapping(x) (uint32_t)((x + 40.0f) / 80.0f * 65535)
 #define angle_mapping_inv(x) (((float)x * 80.0f / 1048575.0f) - 40.0f)
 
-#define velocity_mapping(x) (uint32_t)((x + 40.0f) * 80.0f / 16383)
+#define velocity_mapping(x) (uint32_t)((x + 40.0f) / 80.0f * 16383)
 #define velocity_mapping_inv(x) (((float)x * 1000.0f / 1048575.0f) - 40.0f)
 
-#define torque_mapping(x) (uint32_t)((x + 40.0f) * 80.0f / 65535)
+#define torque_mapping(x) (uint32_t)((x + 40.0f) / 80.0f * 65535)
 #define torque_mapping_inv(x) (((float)x * 1000.0f / 65535.0f) - 40.0f)
 
 #define temperature_mapping_inverse(x) (((float)x + 100.0f) * 100.0f / 65535)
@@ -67,4 +67,5 @@ extern j60_group_t j60_group;
 void j60_init();
 void j60_group_data_acquisition(j60_group_t *tar, can_rx_t *can_rx);
 void j60_group_control_set(j60_group_t *tar);
+void j60_control_set(j60_t *tar, can_tx_t *can_tx);
 #endif // J60_H

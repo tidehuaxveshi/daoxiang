@@ -82,25 +82,38 @@ void j60_group_data_acquisition(j60_group_t *tar, can_rx_t *can_rx)
 
 void j60_control_set(j60_t *tar, can_tx_t *can_tx)
 {
-    can_tx->header.Identifier = 0x4 << 5 | tar->motor_id;
+    j60_data_mapping(tar);
+    can_group_tx_update(can_tx, 0x4 << 5 | tar->motor_id, 8, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
     can_tx->data[0] = (uint8_t)(tar->angle_target_raw & 0xFF);
-    can_tx->data[1] = (uint8_t)(tar->angle_target_raw & 0xFF00) >> 8;
+    can_tx->data[1] = (uint8_t)((tar->angle_target_raw>> 8) & 0xFF) ;
     can_tx->data[2] = (uint8_t)(tar->velocity_target_raw & 0xFF);
     can_tx->data[3] = (uint8_t)(tar->velocity_target_raw & 0x3FC0) >> 8 | (uint8_t)(tar->Kp_raw & 0x3);
     can_tx->data[4] = (uint8_t)(tar->Kp_raw & 0x3FC) >> 2;
     can_tx->data[5] = (uint8_t)(tar->Kd_raw & 0xFF);
     can_tx->data[6] = (uint8_t)(tar->torque_target_raw & 0xFF);
-    can_tx->data[7] = (uint8_t)(tar->torque_target_raw & 0xFFF0) >> 8 ;
+    can_tx->data[7] = (uint8_t)(tar->torque_target_raw & 0xFFF0) >> 8;
+    
+
     can_send_data(can_tx);
 }
 void j60_init()
 {
     j60_group.j60_tx.can_channel = COMMUNICATION_CAN_3;
-    j60_group.j60[1].motor_id = 1;
+    for (int i = 0; i < 16; i++)
+    {
+        j60_group.j60[i].motor_id = i;
+    }
+    j60_group.j60[3].velocity_target=3;
+    j60_group.j60[3].Kd=2;
+    //ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
+    //ID=131,Type=D,Length=8,Data=FF006500000AFF00
+
+
 }
 void j60_group_control_set(j60_group_t *tar)
 {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0;
+         i < 16; i++)
     {
         j60_control_set(&tar->j60[i], &tar->j60_tx);
     }
