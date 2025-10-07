@@ -1,6 +1,14 @@
 #include "serial.h"
 static unsigned char tail[4] = {0x00, 0x00, 0x80, 0x7f};
 receive_packet_t receive_packet = {0};
+
+#if defined(__clang__) && defined(__ARMCC_VERSION)
+__attribute__((section(".ARM.__at_0x24000000")))
+#elif defined(__GNUC__)
+__attribute__((section(".DMA")))
+#else
+#error "Unsupported compiler"
+#endif
 transmit_packet_t transmit_packet = {0};
 
 void serial_init(void)
