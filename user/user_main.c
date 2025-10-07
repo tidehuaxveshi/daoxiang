@@ -16,7 +16,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	}
 
 	rm_motor_data_extract(&wheel, &rxcan_3_standard);
-	BRT38_angle_acquisition(&BRT38_COM,&rxcan_3_standard)
+	BRT38_angle_acquisition(&BRT38,&rxcan_3_standard);
 }
 void tim_init(void)
 {
@@ -33,6 +33,7 @@ void user_init(void)
 {
 	can_init();
 	rm_motor_group_init();
+	BRT38_init();
 	serial_init();
 	
 	tim_init();

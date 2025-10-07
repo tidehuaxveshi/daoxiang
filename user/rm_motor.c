@@ -43,7 +43,7 @@ void current_set(rm_motor_group_t *tar)
     can_send_data(&tar->M3508_tx_one);
     can_send_data(&tar->M3508_tx_two);
 }
-void data_extract(rm_motor_group_t *tar, can_rx_t *rx)
+void rm_motor_data_extract(rm_motor_group_t *tar, can_rx_t *rx)
 {
     int16_t position;
     int16_t velocity;
