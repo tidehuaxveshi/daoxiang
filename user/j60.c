@@ -87,11 +87,11 @@ void j60_control_set(j60_t *tar, can_tx_t *can_tx)
     can_tx->data[0] = (uint8_t)(tar->angle_target_raw & 0xFF);
     can_tx->data[1] = (uint8_t)((tar->angle_target_raw>> 8) & 0xFF) ;
     can_tx->data[2] = (uint8_t)(tar->velocity_target_raw & 0xFF);
-    can_tx->data[3] = (uint8_t)(tar->velocity_target_raw & 0x3FC0) >> 8 | (uint8_t)(tar->Kp_raw & 0x3);
-    can_tx->data[4] = (uint8_t)(tar->Kp_raw & 0x3FC) >> 2;
+    can_tx->data[3] = (uint8_t)((tar->velocity_target_raw>> 8) & 0xC0)  | (uint8_t)(tar->Kp_raw & 0x3);
+    can_tx->data[4] = (uint8_t)((tar->Kp_raw>> 2) & 0xFF) ;
     can_tx->data[5] = (uint8_t)(tar->Kd_raw & 0xFF);
     can_tx->data[6] = (uint8_t)(tar->torque_target_raw & 0xFF);
-    can_tx->data[7] = (uint8_t)(tar->torque_target_raw & 0xFFF0) >> 8;
+    can_tx->data[7] = (uint8_t)((tar->torque_target_raw>> 8) & 0xFF) ;
     
 
     can_send_data(can_tx);
