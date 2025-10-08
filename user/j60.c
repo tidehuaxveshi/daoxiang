@@ -107,6 +107,7 @@ void j60_init()
     j60_group.j60[3].Kd=2;
     //soft:ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
     //    :ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
+    j60_enable(&j60_group.j60[3], &j60_group.j60_tx);
 
 
 
@@ -119,4 +120,9 @@ void j60_group_control_set(j60_group_t *tar)
     {
         j60_control_set(&tar->j60[i], &tar->j60_tx);
     }
+}
+void j60_enable(j60_t *tar, can_tx_t *can_tx)
+{
+    can_group_tx_update(can_tx, 0x2 << 5 | tar->motor_id, 0, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME);
+    can_send_data(can_tx);
 }
