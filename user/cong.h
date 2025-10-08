@@ -16,7 +16,7 @@
 #define COMMUNICATION_CAN_2 (&hfdcan2)
 #define COMMUNICATION_CAN_3 (&hfdcan3)
 
-#define COMMUNICATION_UART (&huart5)
+#define COMMUNICATION_UART (&huart4)
 
 
 #endif /* CONG_H_ */
