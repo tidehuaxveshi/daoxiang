@@ -28,8 +28,13 @@ typedef enum
     CAN_PACKET_SET_CURRENT_HANDBRAKE_REL,
     CAN_PACKET_MAKE_ENUM_32_BITS = 0xFFFFFFFF,
 } CAN_PACKET_ID;
-
+typedef struct vesc
+{
+    uint32_t controller_id;
+}vesc_controller_t;
+    
 void comm_can_set_current(uint32_t controller_id, float current);
 void comm_can_set_rpm(uint32_t controller_id, float rpm);
+void comm_can_set_pos(uint32_t controller_id, float pos);
 void vesc_init();
 #endif // VESC_H

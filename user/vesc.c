@@ -1,5 +1,6 @@
 #include "vesc.h"
 can_tx_t vesc_can_tx;
+vesc_controller_t controller;
 void vesc_init()
 {
     vesc_can_tx.can_channel=COMMUNICATION_CAN_3;
