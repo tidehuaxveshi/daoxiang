@@ -30,5 +30,6 @@ typedef enum
 } CAN_PACKET_ID;
 
 void comm_can_set_current(uint32_t controller_id, float current);
+void comm_can_set_rpm(uint32_t controller_id, float rpm);
 void vesc_init();
 #endif // VESC_H
