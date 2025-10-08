@@ -7,5 +7,6 @@
 #include "BRT38_COM.h"
 #include "j60.h"
 #include "vesc.h"
+#include "motion_planing.h"
 void user_init(void);
 #endif /* USER_MAIN_H_ */

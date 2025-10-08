@@ -16,8 +16,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	}
 
 	rm_motor_data_extract(&wheel, &rxcan_3_standard);
-	BRT38_angle_acquisition(&BRT38,&rxcan_3_standard);
-	//j60_group_data_acquisition(&j60_group, &rxcan_3_standard);
+	BRT38_angle_acquisition(&BRT38, &rxcan_3_standard);
+	// j60_group_data_acquisition(&j60_group, &rxcan_3_standard);
 }
 void tim_init(void)
 {
@@ -40,6 +40,18 @@ void user_init(void)
 	vesc_init();
 	tim_init();
 }
+#define M_PI 3.14159265358979323846f
+int count;
+float time;
+void time_mapping(int* count, float* time)
+{
+	*time = (float)(*count) / (float)MOTOR_CONTROL_FREQ;
+}
+float sin_planing(float time)
+{
+	return 180.0f+ (180.0f*sinf(2.0f * M_PI * time/1.0f));
+}
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM1)
@@ -48,10 +60,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if (htim->Instance == TIM8)
 	{
-		//rm_motor_control();
-		//BRT38_read_cmd(1);
-		//j60_group_control_set(&j60_group);
-		//j60_control_set(j60_group.j60+3, &j60_group.j60_tx);
-     comm_can_set_rpm( 74, 600);
+		// rm_motor_control();
+		// BRT38_read_cmd(1);
+		// j60_group_control_set(&j60_group);
+		// j60_control_set(j60_group.j60+3, &j60_group.j60_tx);
+		//comm_can_set_rpm(74, 600);
+		count++;
+		time_mapping(&count, &time);
+		 comm_can_set_pos(74,  sin_planing(time));
 	}
 }

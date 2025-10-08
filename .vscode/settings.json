@@ -24,6 +24,12 @@
         "cstdlib": "c",
         "stm32h7xx_hal_def.h": "c",
         "stdbool.h": "c",
-        "vesc.h": "c"
+        "vesc.h": "c",
+        "motion_planing.h": "c",
+        "bitset": "c",
+        "algorithm": "c",
+        "format": "c",
+        "__bit_reference": "c",
+        "unordered_map": "c"
     }
 }
