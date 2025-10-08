@@ -37,6 +37,7 @@ void user_init(void)
 	BRT38_init();
 	serial_init();
 	j60_init();
+	vesc_init();
 	tim_init();
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

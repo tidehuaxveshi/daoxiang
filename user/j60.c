@@ -92,8 +92,6 @@ void j60_control_set(j60_t *tar, can_tx_t *can_tx)
     can_tx->data[5] = (uint8_t)(tar->Kd_raw & 0xFF);
     can_tx->data[6] = (uint8_t)(tar->torque_target_raw & 0xFF);
     can_tx->data[7] = (uint8_t)((tar->torque_target_raw>> 8) & 0xFF) ;
-    
-
     can_send_data(can_tx);
 }
 void j60_init()
