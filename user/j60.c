@@ -87,7 +87,7 @@ void j60_control_set(j60_t *tar, can_tx_t *can_tx)
     can_tx->data[0] = (uint8_t)(tar->angle_target_raw & 0xFF);
     can_tx->data[1] = (uint8_t)((tar->angle_target_raw>> 8) & 0xFF) ;
     can_tx->data[2] = (uint8_t)(tar->velocity_target_raw & 0xFF);
-    can_tx->data[3] = (uint8_t)((tar->velocity_target_raw>> 8) & 0xC0)  | (uint8_t)(tar->Kp_raw & 0x3);
+    can_tx->data[3] = (uint8_t)((tar->velocity_target_raw>> 8) & 0x3F)  | (uint8_t)(tar->Kp_raw & 0x3);
     can_tx->data[4] = (uint8_t)((tar->Kp_raw>> 2) & 0xFF) ;
     can_tx->data[5] = (uint8_t)(tar->Kd_raw & 0xFF);
     can_tx->data[6] = (uint8_t)(tar->torque_target_raw & 0xFF);
@@ -105,8 +105,10 @@ void j60_init()
     }
     j60_group.j60[3].velocity_target=3;
     j60_group.j60[3].Kd=2;
-    //ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
-    //ID=131,Type=D,Length=8,Data=FF006500000AFF00
+    //soft:ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
+    //    :ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
+
+
 
 
 }

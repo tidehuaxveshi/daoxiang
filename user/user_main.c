@@ -47,7 +47,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if (htim->Instance == TIM8)
 	{
-		rm_motor_control();
+		//rm_motor_control();
 		//BRT38_read_cmd(1);
 		//j60_group_control_set(&j60_group);
 		j60_control_set(j60_group.j60+3, &j60_group.j60_tx);
