@@ -68,4 +68,5 @@ void j60_init();
 void j60_group_data_acquisition(j60_group_t *tar, can_rx_t *can_rx);
 void j60_group_control_set(j60_group_t *tar);
 void j60_control_set(j60_t *tar, can_tx_t *can_tx);
+void j60_enable(j60_t *tar, can_tx_t *can_tx);
 #endif // J60_H

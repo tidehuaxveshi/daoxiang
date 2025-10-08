@@ -5,8 +5,8 @@
 #include "rm_motor.h"
 #define DATA_TEST_TRANSMIT_SIZE 8
 #define DATA_TEST_RECEIVE_SIZE 8
-#define COMMUNICATION_UART_TX_DMA hdma_uart5_tx
-#define COMMUNICATION_UART_RX_DMA hdma_uart5_rx
+#define COMMUNICATION_UART_TX_DMA hdma_uart4_tx
+#define COMMUNICATION_UART_RX_DMA hdma_uart4_rx
 extern DMA_HandleTypeDef COMMUNICATION_UART_TX_DMA;
 extern DMA_HandleTypeDef COMMUNICATION_UART_RX_DMA;
 void serial_init(void);
@@ -17,7 +17,7 @@ typedef struct t{
 } transmit_packet_t;
 typedef struct r{
     uint8_t head;
-    int data;     
+    int data[100];     
     uint8_t tail;   
 } receive_packet_t;
 #pragma pack(pop)  

@@ -107,6 +107,9 @@ void j60_init()
     j60_group.j60[3].Kd=2;
     //soft:ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
     //    :ID=131,Type=D,Length=8,Data=FF7F6522000AFF7F
+     HAL_Delay(100);
+    j60_enable(&j60_group.j60[3], &j60_group.j60_tx);
+    HAL_Delay(100);
     j60_enable(&j60_group.j60[3], &j60_group.j60_tx);
 
 
