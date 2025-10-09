@@ -96,7 +96,7 @@ void j60_control_set(j60_t *tar, can_tx_t *can_tx)
 }
 void j60_init()
 {
-    j60_group.j60_tx.can_channel = COMMUNICATION_CAN_3;
+    j60_group.j60_tx.can_channel = COMMUNICATION_CAN_2;
     for (int i = 0; i < 16; i++)
     {
         j60_group.j60[i].motor_id = i;

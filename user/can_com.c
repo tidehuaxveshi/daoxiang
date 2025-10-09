@@ -6,8 +6,7 @@ can_rx_t rxcan_2 = {0};
 
 can_rx_t rxcan_3_standard = {0};
 
-
-void fdcan_setting_init(FDCAN_HandleTypeDef *hfdcan, uint32_t offset)
+void can_setting_init(FDCAN_HandleTypeDef *hfdcan, uint32_t offset)
 {
 	hfdcan->Init.FrameFormat = FDCAN_FRAME_CLASSIC;
 	hfdcan->Init.Mode = FDCAN_MODE_NORMAL;
@@ -42,6 +41,40 @@ void fdcan_setting_init(FDCAN_HandleTypeDef *hfdcan, uint32_t offset)
 	}
 }
 
+void can_fd_setting_init(FDCAN_HandleTypeDef *hfdcan, uint32_t offset)
+{
+	hfdcan->Init.FrameFormat = FDCAN_FRAME_FD_BRS;
+	hfdcan->Init.Mode = FDCAN_MODE_NORMAL;
+	hfdcan->Init.AutoRetransmission = DISABLE;
+	hfdcan->Init.TransmitPause = DISABLE;
+	hfdcan->Init.ProtocolException = DISABLE;
+	hfdcan->Init.NominalPrescaler = 12;
+	hfdcan->Init.NominalSyncJumpWidth = 1;
+	hfdcan->Init.NominalTimeSeg1 = 5;
+	hfdcan->Init.NominalTimeSeg2 = 2;
+	hfdcan->Init.DataPrescaler = 6;
+	hfdcan->Init.DataSyncJumpWidth = 1;
+	hfdcan->Init.DataTimeSeg1 = 5;
+	hfdcan->Init.DataTimeSeg2 = 2;
+	hfdcan->Init.MessageRAMOffset = offset;
+	hfdcan->Init.StdFiltersNbr = 8;
+	hfdcan->Init.ExtFiltersNbr = 8;
+	hfdcan->Init.RxFifo0ElmtsNbr = 8;
+	hfdcan->Init.RxFifo0ElmtSize = FDCAN_DATA_BYTES_8;
+	hfdcan->Init.RxFifo1ElmtsNbr = 0;
+	hfdcan->Init.RxFifo1ElmtSize = FDCAN_DATA_BYTES_8;
+	hfdcan->Init.RxBuffersNbr = 0;
+	hfdcan->Init.RxBufferSize = FDCAN_DATA_BYTES_8;
+	hfdcan->Init.TxEventsNbr = 0;
+	hfdcan->Init.TxBuffersNbr = 0;
+	hfdcan->Init.TxFifoQueueElmtsNbr = 8;
+	hfdcan->Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
+	hfdcan->Init.TxElmtSize = FDCAN_DATA_BYTES_8;
+	if (HAL_FDCAN_Init(hfdcan) != HAL_OK)
+	{
+		Error_Handler();
+	}
+}
 
 void can_group_tx_update(can_tx_t *tx, uint32_t id, uint32_t length, uint32_t STD_EXT, uint32_t RTR)
 {
@@ -53,9 +86,20 @@ void can_group_tx_update(can_tx_t *tx, uint32_t id, uint32_t length, uint32_t ST
 	tx->header.FDFormat = FDCAN_CLASSIC_CAN;
 	tx->header.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
 	tx->header.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
-
 }
 
+
+void can_fd_group_tx_update(can_tx_t *tx, uint32_t id, uint32_t length, uint32_t STD_EXT, uint32_t RTR)
+{
+	tx->header.Identifier = id;
+	tx->header.IdType = STD_EXT;
+	tx->header.TxFrameType = RTR;
+	tx->header.DataLength = length;
+	tx->header.BitRateSwitch = FDCAN_BRS_ON;
+	tx->header.FDFormat = FDCAN_FD_CAN;
+	tx->header.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+	tx->header.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
+}
 void can_rx_mask_update(can_rx_t *rx, uint32_t id, uint32_t mask_setting, uint32_t fifo_setting, uint32_t filter_bank, uint32_t STD_EXT, uint32_t RTR)
 {
 	rx->filter_config.FilterIndex = filter_bank;
@@ -67,7 +111,6 @@ void can_rx_mask_update(can_rx_t *rx, uint32_t id, uint32_t mask_setting, uint32
 	HAL_FDCAN_ConfigFilter(rx->can_channel, &rx->filter_config);
 }
 
-
 void can_send_data(can_tx_t *tx)
 {
 	HAL_FDCAN_AddMessageToTxFifoQ(tx->can_channel, &tx->header, tx->data);
@@ -75,9 +118,9 @@ void can_send_data(can_tx_t *tx)
 
 void can_init(void)
 {
-	fdcan_setting_init(COMMUNICATION_CAN_1, 0);
-	fdcan_setting_init(COMMUNICATION_CAN_2, 512);
-	fdcan_setting_init(COMMUNICATION_CAN_3, 1024);
+	can_setting_init(COMMUNICATION_CAN_1, 0);
+	can_setting_init(COMMUNICATION_CAN_2, 512);
+	can_setting_init(COMMUNICATION_CAN_3, 1024);
 
 	// txcan_1.can_channel = COMMUNICATION_CAN_1;
 	// rxcan_1.can_channel = COMMUNICATION_CAN_1;
@@ -86,9 +129,8 @@ void can_init(void)
 
 	rxcan_3_standard.can_channel = COMMUNICATION_CAN_3;
 
-
-	 HAL_FDCAN_Start(COMMUNICATION_CAN_1);
-	 HAL_FDCAN_Start(COMMUNICATION_CAN_2);
+	HAL_FDCAN_Start(COMMUNICATION_CAN_1);
+	HAL_FDCAN_Start(COMMUNICATION_CAN_2);
 	HAL_FDCAN_Start(COMMUNICATION_CAN_3);
 
 	// __HAL_FDCAN_ENABLE_IT(COMMUNICATION_CAN, FDCAN_IT_RX_FIFO0_NEW_MESSAGE);
@@ -98,4 +140,3 @@ void can_init(void)
 	HAL_FDCAN_ActivateNotification(&hfdcan3, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
 	// __HAL_CAN_ENABLE_IT(COMMUNICATION_CAN, CAN_IT_TX_MAILBOX_EMPTY);
 }
-

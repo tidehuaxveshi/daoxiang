@@ -28,6 +28,7 @@ typedef struct can_rx{
 extern can_rx_t rxcan_3_standard;
 void can_group_tx_update(can_tx_t *tx, uint32_t id, uint32_t length, uint32_t STD_EXT, uint32_t RTR);
 void can_send_data(can_tx_t *tx);
+void can_fd_group_tx_update(can_tx_t *tx, uint32_t id, uint32_t length, uint32_t STD_EXT, uint32_t RTR);
 extern can_tx_t txcan_1;
 extern can_rx_t rxcan_1;
 extern can_tx_t txcan_2;

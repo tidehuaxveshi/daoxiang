@@ -43,13 +43,14 @@ void user_init(void)
 #define M_PI 3.14159265358979323846f
 int count;
 float time;
-void time_mapping(int* count, float* time)
+void time_mapping(int *count, float *time)
 {
 	*time = (float)(*count) / (float)MOTOR_CONTROL_FREQ;
 }
 float sin_planing(float time)
 {
-	return 180.0f+ (180.0f*sinf(2.0f * M_PI * time/1.0f));
+	time = fmodf(time, 1);
+	return 180.0f + (180.0f * cosf(M_PI * time / 1.0f));
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -63,10 +64,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		// rm_motor_control();
 		// BRT38_read_cmd(1);
 		// j60_group_control_set(&j60_group);
-		 j60_control_set(j60_group.j60+3, &j60_group.j60_tx);
-		////comm_can_set_rpm(74, 600);
+		j60_control_set(j60_group.j60 + 3, &j60_group.j60_tx);
+		//comm_can_set_rpm(74, 600);
 		count++;
 		time_mapping(&count, &time);
-		 comm_can_set_pos(74,  sin_planing(time));
+		comm_can_set_pos(74, sin_planing(time));
 	}
 }
